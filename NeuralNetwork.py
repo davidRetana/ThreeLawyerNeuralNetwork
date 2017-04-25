@@ -86,8 +86,6 @@ class NeuralNetwork:
         return self.sigmoid(z) * (1 - self.sigmoid(z))
     
     def predict(self, X):
-        if self.Theta1 is None:
-            raise RuntimeError("You need to train the net first, idiot!")
         """
         Predict labels for a given set of examples.
         The three layer perceptron needs to be trained before call this method.
@@ -108,10 +106,12 @@ class NeuralNetwork:
         >>> X = np.array([[0.0, 0.0], [0.0, 1.0], [1.0, 0.0], [1.1, 1.1]])
         >>> y = np.array([0, 1, 1, 1]) # or function
         >>> nn = NeuralNetwork(2, 2, 2) # NeuralNet instance
-        >>> nn.train(X, y, lambdaa=0.5, epsilon=0.00001)
+        >>> nn.train(X, y, lambdaa=0.0, epsilon=0.001)
         >>> nn.predict(np.array([0.0, 0.1]))
         array([1])
         """
+        if self.Theta1 is None:
+            raise RuntimeError("You need to train the net first, idiot!")
         if len(X.shape) == 1:
             X = X.reshape((1, X.shape[0]))
         m = X.shape[0] #number of examples to predict
@@ -260,7 +260,7 @@ class NeuralNetwork:
 
 
 if __name__ == '__main__':
-    '''
+    
     X = np.array([[0.0, 0.0], 
                   [0.0, 1.0], 
                   [1.0, 0.0], 
@@ -268,19 +268,19 @@ if __name__ == '__main__':
     y = np.array([0, 1, 1, 1]) # or function
     nn = NeuralNetwork(2, 2, 2)
     nn.train(X, y, lambdaa=0.0, epsilon=0.01)
-    pred = nn.predict(X_raw)
+    pred = nn.predict(X)
     print('Training Set Accuracy: ', np.sum((pred == y)*1) / len(y))
     '''
-    #df = pd.read_csv("/home/david/Desktop/kaggle/DigitRecognizer/train.csv")
-    df = pd.read_csv("C:/Users/David/Desktop/kaggle/DigitRecognizer/train.csv")
-    #df = pd.read_csv("F:/kaggle/DigitRecognizer/train.csv")
+    # Digit recognizer competition (Kaggle data)
+    df = pd.read_csv("/home/david/Desktop/kaggle/DigitRecognizer/train.csv")
+    #df = pd.read_csv("C:/Users/David/Desktop/kaggle/DigitRecognizer/train.csv")
     
     X_raw, y = df.iloc[:,1:].as_matrix(), df.iloc[:, 0].as_matrix() # separate features and labels
     X = preprocessing.scale(X_raw) # mean = 0.0, std = 1.0
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1)
-    nn = NeuralNetwork(784, 10, 10)
+    nn = NeuralNetwork(784, 100, 10)
 
-    nn.train(X_train, y_train, max_iter=20)
+    nn.train(X_train, y_train, max_iter=100)
 
     pred = nn.predict(X_test)
     matches = np.sum((pred == y_test)*1)
@@ -292,12 +292,10 @@ if __name__ == '__main__':
     print('Test Set Accuracy: ', matches / m)
     print(pred)
     print(y_test.reshape(1, y_test.shape[0]))
-    
-    #foo = nn.compute_precision_recall(X_train, y_train)
 
-    #df_test = pd.read_csv("/home/david/Desktop/kaggle/DigitRecognizer/train.csv")
+    df_test = pd.read_csv("/home/david/Desktop/kaggle/DigitRecognizer/train.csv")
     #df_test = pd.read_csv("C:/Users/David/Desktop/kaggle/DigitRecognizer/test.csv")
-    #predictions = nn.predict(preprocessing.scale(df_test))
-    #foo = pd.DataFrame(data=predictions, index=np.arange(28000)+1, columns=["Label"])
-
+    predictions = nn.predict(preprocessing.scale(df_test))
+    #to_save = pd.DataFrame(data=predictions, index=np.arange(28000)+1, columns=["Label"])
+    '''
     

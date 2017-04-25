@@ -20,7 +20,7 @@ import numpy as np
 import pandas as pd
 from time import time
 from scipy.optimize import fmin_cg #nonlinear conjugate gradient algorithm
-from sklearn.model_selection import train_test_split
+#from sklearn.model_selection import train_test_split
 from sklearn import preprocessing
 
 __author__ = "Retana Ribeiro, David"
@@ -50,6 +50,7 @@ class NeuralNetwork:
         """
         In order to instantiate this class you need to pass the units in each
         of the three layers of this Multi Layer Perceptron (MLP)
+        
         Parameters
         ----------
         input_layer_size : int
@@ -89,6 +90,7 @@ class NeuralNetwork:
         """
         Predict labels for a given set of examples.
         The three layer perceptron needs to be trained before call this method.
+        
         Parameters
         ----------
         X : array_like
@@ -188,6 +190,7 @@ class NeuralNetwork:
         This method train the current neural net using backpropagation to
         compute partial derivatives, it uses X and y to fit the model.
         For an optimal performance, X dataset needs to be scaled first
+        
         Parameters
         ----------
         X : array_like
